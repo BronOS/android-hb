@@ -12,10 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.model.Account;
+import com.bronos.hb.model.Category;
 
 import java.util.List;
 
-public class HB extends ListActivity {
+public class HBActivity extends ListActivity {
     private AccountsDataSource datasource;
     final private static int ACCOUNTS_MENU_EDIT = 1;
     final private static int ACCOUNTS_MENU_REMOVE = 2;
@@ -32,6 +33,9 @@ public class HB extends ListActivity {
         datasource.open();
 
         showList();
+
+        ListView list = (ListView)getListView();
+        registerForContextMenu(list);
     }
 
     private void showList()
@@ -39,8 +43,6 @@ public class HB extends ListActivity {
         List<Account> values = datasource.getAllAccounts();
         ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
-        ListView list = (ListView)getListView();
-        registerForContextMenu(list);
     }
 
     private void addCancelButtonToMenu(AlertDialog.Builder builder)
@@ -144,9 +146,9 @@ public class HB extends ListActivity {
                 addAccount();
                 return true;
             case R.id.categories:
-//                Intent intent = new Intent(this, SubLayout.class);
+                Intent intent = new Intent(this, CategoriesActivity.class);
 //                intent.setData(Uri.parse("content://uri_to_my_object"));
-//                startActivityForResult(intent, requestCodeForSubLayoutActivity);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

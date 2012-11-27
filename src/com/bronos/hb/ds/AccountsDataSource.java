@@ -15,7 +15,7 @@ public class AccountsDataSource {
     // Database fields
     private SQLiteDatabase database;
     private HBSQLiteHelper dbHelper;
-    private String[] allColumns = {"_id", "title", "amount"};
+    private String[] allColumns = {HBSQLiteHelper.TABLE_ID, "title", "amount"};
 
     public AccountsDataSource(Context context) {
         dbHelper = new HBSQLiteHelper(context);
@@ -33,7 +33,7 @@ public class AccountsDataSource {
         ContentValues values = new ContentValues();
         values.put("title", title);
         values.put("amount", amount);
-        long id = database.insert("accounts", null, values);
+        long id = database.insert(HBSQLiteHelper.TABLE_ACCOUNTS, null, values);
         return getAccount(id);
     }
 
@@ -41,12 +41,12 @@ public class AccountsDataSource {
         ContentValues values = new ContentValues();
         values.put("title", account.getTitle());
         values.put("amount", account.getAmount());
-        long id = database.update("accounts", values, "_id = " + account.getId(), null);
+        long id = database.update(HBSQLiteHelper.TABLE_ACCOUNTS, values, HBSQLiteHelper.TABLE_ID + " = " + account.getId(), null);
         return getAccount(id);
     }
 
     public Account getAccount(long id) {
-        Cursor cursor = database.query("accounts", allColumns, "_id = " + id, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ACCOUNTS, allColumns, HBSQLiteHelper.TABLE_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         Account newAccount = cursorToAccount(cursor);
         cursor.close();
@@ -55,13 +55,14 @@ public class AccountsDataSource {
 
     public void deleteAccount(Account account) {
         long id = account.getId();
-        database.delete("accounts", "_id = " + id, null);
+        // TODO: delete all orders in this account.
+        database.delete(HBSQLiteHelper.TABLE_ACCOUNTS, HBSQLiteHelper.TABLE_ID + " = " + id, null);
     }
 
     public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<Account>();
 
-        Cursor cursor = database.query("accounts", allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ACCOUNTS, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

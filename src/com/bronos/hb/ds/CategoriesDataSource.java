@@ -17,8 +17,7 @@ public class CategoriesDataSource {
     // Database fields
     private SQLiteDatabase database;
     private HBSQLiteHelper dbHelper;
-    private String[] allColumns = {"_id", "parent_id", "title"};
-    final public static String TABLE_NAME = "categories";
+    private String[] allColumns = {HBSQLiteHelper.TABLE_ID, "parent_id", "level", "title"};
 
     public CategoriesDataSource(Context context) {
         dbHelper = new HBSQLiteHelper(context);
@@ -43,7 +42,7 @@ public class CategoriesDataSource {
         values.put("parent_id", parent_id);
         values.put("level", level);
         values.put("title", title);
-        long id = database.insert(TABLE_NAME, null, values);
+        long id = database.insert(HBSQLiteHelper.TABLE_CATEGORIES, null, values);
         return get(id);
     }
 
@@ -52,12 +51,12 @@ public class CategoriesDataSource {
         values.put("parent_id", category.getParentId());
         values.put("level", category.getLevel());
         values.put("title", category.getTitle());
-        long id = database.update(TABLE_NAME, values, "_id = " + category.getId(), null);
+        long id = database.update(HBSQLiteHelper.TABLE_CATEGORIES, values, HBSQLiteHelper.TABLE_ID + " = " + category.getId(), null);
         return get(id);
     }
 
     public Category get(long id) {
-        Cursor cursor = database.query(TABLE_NAME, allColumns, "_id = " + id, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_CATEGORIES, allColumns, HBSQLiteHelper.TABLE_ID + " = " + id, null, null, null, null);
         cursor.moveToFirst();
         Category newModel = cursorToModel(cursor);
         cursor.close();
@@ -67,7 +66,7 @@ public class CategoriesDataSource {
     public List<Category> getChildren(long parentId) {
         List<Category> list = new ArrayList<Category>();
 
-        Cursor cursor = database.query(TABLE_NAME, allColumns, "parent_id = " + parentId, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_CATEGORIES, allColumns, "parent_id = " + parentId, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -87,13 +86,15 @@ public class CategoriesDataSource {
             delete(child);
         }
 
-        database.delete(TABLE_NAME, "_id = " + id, null);
+        // TODO: remove orders.
+
+        database.delete(HBSQLiteHelper.TABLE_CATEGORIES, HBSQLiteHelper.TABLE_ID + " = " + id, null);
     }
 
     public List<Category> getAll() {
         List<Category> list = new ArrayList<Category>();
 
-        Cursor cursor = database.query(TABLE_NAME, allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_CATEGORIES, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -114,7 +115,7 @@ public class CategoriesDataSource {
         List<Category> retList = new ArrayList<Category>();
 
         for (Category category: list) {
-            if (category.getId() == parentId) {
+            if (category.getParentId() == parentId) {
                 retList.add(category);
                 retList.addAll(sortListByParent(category.getId(), list));
             }
@@ -127,6 +128,7 @@ public class CategoriesDataSource {
         Category category = new Category();
         category.setId(cursor.getLong(0));
         category.setParentId(cursor.getLong(1));
-        category.setTitle(cursor.getString(2));
+        category.setLevel(cursor.getLong(2));
+        category.setTitle(cursor.getString(3));
         return category;
     }}

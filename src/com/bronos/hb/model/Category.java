@@ -44,7 +44,7 @@ public class Category {
         String space = "";
 
         for (int x =  0; x < level; x++) {
-            space += "-";
+            space += "      ";
         }
 
         return space + title;

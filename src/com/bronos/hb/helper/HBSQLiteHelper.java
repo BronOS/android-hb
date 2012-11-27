@@ -6,22 +6,30 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class HBSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hb.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
-    private static final String DATABASE_CREATE = 
-            "CREATE TABLE accounts(" +
-            "    _id INTEGER PRIMARY KEY autoincrement," +
+    public static final String TABLE_ID = "_id";
+
+    public static final String TABLE_ACCOUNTS = "accounts";
+    public static final String TABLE_ORDERS = "orders";
+    public static final String TABLE_CATEGORIES = "categories";
+
+    private static final String DATABASE_CREATE_ACCOUNTS =
+            "CREATE TABLE " + TABLE_ACCOUNTS + "(" +
+            "    " + TABLE_ID + " INTEGER PRIMARY KEY autoincrement," +
             "    title TEXT NOT NULL," +
             "    amount REAL DEFAULT 0" +
-            ");" +
-            "CREATE TABLE categories(" +
-            "    _id INTEGER PRIMARY KEY autoincrement," +
+            ");";
+    private static final String DATABASE_CREATE_CATEGORIES =
+            "CREATE TABLE " + TABLE_CATEGORIES + "(" +
+            "    " + TABLE_ID + " INTEGER PRIMARY KEY autoincrement," +
             "    parent_id INTEGER DEFAULT 0," +
             "    level INTEGER DEFAULT 0," +
             "    title TEXT NOT NULL" +
-            ");" +
-            "CREATE TABLE orders(" +
-            "    _id INTEGER PRIMARY KEY autoincrement," +
+            ");";
+    private static final String DATABASE_CREATE_ORDERS =
+            "CREATE TABLE " + TABLE_ORDERS + "(" +
+            "    " + TABLE_ID + " INTEGER PRIMARY KEY autoincrement," +
             "    user_id INTEGER DEFAULT 0," +
             "    category_id INTEGER DEFAULT 0," +
             "    account_id INTEGER DEFAULT 0," +
@@ -31,23 +39,29 @@ public class HBSQLiteHelper extends SQLiteOpenHelper {
             "    order_sum REAL DEFAULT 0," +
             "    description TEXT NOT NULL" +
             ");";
-    private static final String DATABASE_DELETE =
-            "DROP TABLE IF EXISTS accounts;" +
-            "DROP TABLE IF EXISTS categories;" +
-            "DROP TABLE IF EXISTS orders;";
-    
+    private static final String DATABASE_DELETE_ACCOUNTS =
+            "DROP TABLE IF EXISTS " + TABLE_ACCOUNTS + ";";
+    private static final String DATABASE_DELETE_CATEGORIES =
+            "DROP TABLE IF EXISTS " + TABLE_CATEGORIES + ";";
+    private static final String DATABASE_DELETE_ORDERS =
+            "DROP TABLE IF EXISTS " + TABLE_ORDERS + ";";
+
     public HBSQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(DATABASE_CREATE_ACCOUNTS);
+        database.execSQL(DATABASE_CREATE_CATEGORIES);
+        database.execSQL(DATABASE_CREATE_ORDERS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DATABASE_DELETE);
+        db.execSQL(DATABASE_DELETE_ACCOUNTS);
+        db.execSQL(DATABASE_DELETE_CATEGORIES);
+        db.execSQL(DATABASE_DELETE_ORDERS);
         onCreate(db);
     }
 }

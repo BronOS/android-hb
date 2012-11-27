@@ -3,4 +3,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add"
           android:title="@string/add" />
+    <item android:id="@+id/categories"
+          android:title="@string/categories" />
 </menu>

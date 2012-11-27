@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class HBSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hb.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE = 
             "CREATE TABLE accounts(" +
@@ -17,6 +17,7 @@ public class HBSQLiteHelper extends SQLiteOpenHelper {
             "CREATE TABLE categories(" +
             "    _id INTEGER PRIMARY KEY autoincrement," +
             "    parent_id INTEGER DEFAULT 0," +
+            "    level INTEGER DEFAULT 0," +
             "    title TEXT NOT NULL" +
             ");" +
             "CREATE TABLE orders(" +

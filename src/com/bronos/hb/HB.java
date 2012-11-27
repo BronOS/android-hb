@@ -3,6 +3,7 @@ package com.bronos.hb;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
@@ -30,10 +31,10 @@ public class HB extends ListActivity {
         datasource = new AccountsDataSource(this);
         datasource.open();
 
-        showAccounts();
+        showList();
     }
 
-    private void showAccounts()
+    private void showList()
     {
         List<Account> values = datasource.getAllAccounts();
         ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
@@ -63,7 +64,7 @@ public class HB extends ListActivity {
         builder.setPositiveButton(this.getString(R.string.add), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 datasource.createAccount(input.getText().toString(), new Float(0));
-                showAccounts();
+                showList();
             }
         });
 
@@ -89,7 +90,7 @@ public class HB extends ListActivity {
             public void onClick(DialogInterface dialog, int which) {
                 account.setTitle(input.getText().toString());
                 datasource.updateAccount(account);
-                showAccounts();
+                showList();
             }
         });
 
@@ -111,7 +112,7 @@ public class HB extends ListActivity {
         builder.setPositiveButton(this.getString(R.string.remove), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 datasource.deleteAccount(account);
-                showAccounts();
+                showList();
             }
         });
 
@@ -141,6 +142,11 @@ public class HB extends ListActivity {
         switch (item.getItemId()) {
             case R.id.add:
                 addAccount();
+                return true;
+            case R.id.categories:
+//                Intent intent = new Intent(this, SubLayout.class);
+//                intent.setData(Uri.parse("content://uri_to_my_object"));
+//                startActivityForResult(intent, requestCodeForSubLayoutActivity);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

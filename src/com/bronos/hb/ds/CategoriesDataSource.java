@@ -33,8 +33,15 @@ public class CategoriesDataSource {
     }
 
     public Category create(long parent_id, String title) {
+        long level = 0;
+        if (parent_id > 0) {
+            Category parentCategory = get(parent_id);
+            level = parentCategory.getLevel() + 1;
+        }
+
         ContentValues values = new ContentValues();
         values.put("parent_id", parent_id);
+        values.put("level", level);
         values.put("title", title);
         long id = database.insert(TABLE_NAME, null, values);
         return get(id);
@@ -43,6 +50,7 @@ public class CategoriesDataSource {
     public Category update(Category category) {
         ContentValues values = new ContentValues();
         values.put("parent_id", category.getParentId());
+        values.put("level", category.getLevel());
         values.put("title", category.getTitle());
         long id = database.update(TABLE_NAME, values, "_id = " + category.getId(), null);
         return get(id);
@@ -56,8 +64,29 @@ public class CategoriesDataSource {
         return newModel;
     }
 
+    public List<Category> getChildren(long parentId) {
+        List<Category> list = new ArrayList<Category>();
+
+        Cursor cursor = database.query(TABLE_NAME, allColumns, "parent_id = " + parentId, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Category category = cursorToModel(cursor);
+            list.add(category);
+            cursor.moveToNext();
+        }
+        // Make sure to close the cursor
+        cursor.close();
+        return list;
+    }
+
     public void delete(Category category) {
         long id = category.getId();
+
+        for (Category child: getChildren(id)) {
+            delete(child);
+        }
+
         database.delete(TABLE_NAME, "_id = " + id, null);
     }
 
@@ -75,6 +104,23 @@ public class CategoriesDataSource {
         // Make sure to close the cursor
         cursor.close();
         return list;
+    }
+
+    public List<Category> getAllSorted() {
+        return sortListByParent(0, getAll());
+    }
+
+    private List<Category> sortListByParent(long parentId, List<Category> list) {
+        List<Category> retList = new ArrayList<Category>();
+
+        for (Category category: list) {
+            if (category.getId() == parentId) {
+                retList.add(category);
+                retList.addAll(sortListByParent(category.getId(), list));
+            }
+        }
+
+        return retList;
     }
 
     private Category cursorToModel(Cursor cursor) {

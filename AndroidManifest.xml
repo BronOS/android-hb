@@ -13,5 +13,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Orders" android:label="@string/orders"/>
+        <activity android:name=".Categories" android:label="Categories"/>
     </application>
 </manifest> 

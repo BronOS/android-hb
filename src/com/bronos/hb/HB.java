@@ -1,6 +1,5 @@
 package com.bronos.hb;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -10,12 +9,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.model.Account;
 
 import java.util.List;
 
 public class HB extends ListActivity {
     private AccountsDataSource datasource;
+    final private static int ACCOUNTS_MENU_EDIT = 1;
+    final private static int ACCOUNTS_MENU_REMOVE = 2;
 
     /**
      * Called when the activity is first created.
@@ -31,7 +33,7 @@ public class HB extends ListActivity {
         showAccounts();
     }
 
-    public void showAccounts()
+    private void showAccounts()
     {
         List<Account> values = datasource.getAllAccounts();
         ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
@@ -40,15 +42,20 @@ public class HB extends ListActivity {
         registerForContextMenu(list);
     }
 
+    private void addCancelButtonToMenu(AlertDialog.Builder builder)
+    {
+        builder.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+    }
+
     private void addAccount()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle(R.string.add_account);
-
-//        String message = this.getString(R.string.del_alert_message);
-//        message = String.format(message, selectedContact.getName());
-//        builder.setMessage(message);
 
         final EditText input = new EditText(this);
         builder.setView(input);
@@ -59,11 +66,8 @@ public class HB extends ListActivity {
                 showAccounts();
             }
         });
-        builder.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+
+        addCancelButtonToMenu(builder);
 
         builder.show();
     }
@@ -88,11 +92,30 @@ public class HB extends ListActivity {
                 showAccounts();
             }
         });
-        builder.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+
+        addCancelButtonToMenu(builder);
+
+        builder.show();
+    }
+
+    private void removeAccount(MenuItem item)
+    {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final Account account = (Account)getListAdapter().getItem(info.position);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.remove_account);
+        builder.setMessage(R.string.remove_account_description);
+
+        builder.setPositiveButton(this.getString(R.string.remove), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+                datasource.deleteAccount(account);
+                showAccounts();
             }
         });
+
+        addCancelButtonToMenu(builder);
 
         builder.show();
     }
@@ -100,11 +123,9 @@ public class HB extends ListActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.context_menu, menu);
         menu.setHeaderTitle(getString(R.string.manage_account));
-        menu.add(0, 1, 1, R.string.edit);
-        menu.add(0, 2, 2, R.string.remove);
+        menu.add(0, ACCOUNTS_MENU_EDIT, ACCOUNTS_MENU_EDIT, R.string.edit);
+        menu.add(0, ACCOUNTS_MENU_REMOVE, ACCOUNTS_MENU_REMOVE, R.string.remove);
     }
 
     @Override
@@ -129,10 +150,11 @@ public class HB extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case 1:
+            case ACCOUNTS_MENU_EDIT:
                 editAccount(item);
                 return true;
-            case 2:
+            case ACCOUNTS_MENU_REMOVE:
+                removeAccount(item);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -149,5 +171,12 @@ public class HB extends ListActivity {
     protected void onPause() {
         datasource.close();
         super.onPause();
+    }
+
+    @Override
+    public void onListItemClick(ListView parent, View view, int position, long id)
+    {
+        final Account account = (Account)getListAdapter().getItem(position);
+        view.setEnabled(false);
     }
 }

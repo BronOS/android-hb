@@ -1,4 +1,4 @@
-package com.bronos.hb;
+package com.bronos.hb.ds;
 
 import java.util.ArrayList;
 import java.util.List;

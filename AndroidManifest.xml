@@ -15,5 +15,6 @@
         <activity android:name=".OrdersActivity" android:label="@string/orders"/>
         <activity android:name=".CategoriesActivity" android:label="@string/categories"/>
         <activity android:name=".EditOrderActivity" android:label="@string/add_order"/>
+        <activity android:name=".FiltersOrdersActivity" android:label="@string/filter"/>
     </application>
 </manifest> 

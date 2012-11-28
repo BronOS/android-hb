@@ -1,5 +1,7 @@
 package com.bronos.hb.model;
 
+import com.bronos.hb.ds.OrdersDataSource;
+
 public class Order {
     private long id;
     private long userId;
@@ -95,6 +97,6 @@ public class Order {
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
-        return description;
+        return categoryTitle + ": <b>" + orderSum + "</b>\n" + description;
     }
 }

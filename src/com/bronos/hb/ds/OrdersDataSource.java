@@ -86,11 +86,13 @@ public class OrdersDataSource {
     }
 
     public List<Order> getAll() {
+        return getAll(null);
+    }
+
+    public List<Order> getAll(String filter) {
         List<Order> list = new ArrayList<Order>();
 
-        // TODO: sort by created_at DESC.
-
-        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ORDERS, allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ORDERS, allColumns, filter, null, null, null, "created_at DESC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

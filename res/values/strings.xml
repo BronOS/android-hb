@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">hb</string>
     <string name="accounts">Accounts</string>
+    <string name="total">Total</string>
     <string name="orders">Orders</string>
     <string name="categories">Categories</string>
     <string name="root_category">Root</string>
@@ -31,4 +32,14 @@
     <string name="save">Save</string>
     <string name="type_income">(+) Income</string>
     <string name="type_outgo">(-) Outgo</string>
+
+    <string name="edit_order_category">Category:</string>
+    <string name="edit_order_account">Account:</string>
+    <string name="edit_order_type">Type:</string>
+    <string name="edit_order_choose_type">Choose Type</string>
+    <string name="edit_order_choose_account">Choose Account</string>
+    <string name="edit_order_choose_category">Choose Category</string>
+    <string name="edit_order_choose_category_message">Please set category</string>
+    <string name="edit_order_choose_account_message">Please set account</string>
+    <string name="edit_order_choose_sum_message">Please set order sum</string>
 </resources>

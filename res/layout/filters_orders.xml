@@ -34,29 +34,10 @@
             android:layout_height="@dimen/list"
             android:id="@+id/type" android:clickable="true" android:textStyle="bold" android:gravity="center"
             android:textSize="18dp"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sum"
-            android:id="@+id/sumTitle"/>
-    <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sum" android:singleLine="true" android:selectAllOnFocus="true" android:numeric="decimal"
-            android:phoneNumber="false" android:inputType="numberDecimal"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:id="@+id/descriptionTitle" android:layout_gravity="left|center_vertical"/>
-    <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="90dp"
-            android:id="@+id/description" android:layout_gravity="left|center_vertical" android:selectAllOnFocus="true" />
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:text="@string/filter"
             android:id="@+id/save" android:layout_gravity="left|center_vertical"/>
 </LinearLayout>
 

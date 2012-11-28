@@ -40,6 +40,13 @@ public class HBActivity extends ListActivity {
 
     private void showList() {
         List<Account> values = datasource.getAllAccounts();
+
+        double sum = 0;
+        for (Account account: values) {
+            sum += account.getAmount();
+        }
+        setTitle(getString(R.string.accounts) + "|" + getString(R.string.total) + ": " + sum);
+
         ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
     }
@@ -140,9 +147,13 @@ public class HBActivity extends ListActivity {
      *
      * @return void
      */
-    private void showOrders(String filter) {
+    private void showOrders(Long accountId) {
         Intent intent = new Intent(this, OrdersActivity.class);
-        intent.putExtra("filter", filter);
+
+        if (accountId != null) {
+            intent.putExtra("account", accountId);
+        }
+
         startActivity(intent);
     }
 
@@ -208,6 +219,6 @@ public class HBActivity extends ListActivity {
     @Override
     public void onListItemClick(ListView parent, View view, int position, long id) {
         final Account account = (Account) getListAdapter().getItem(position);
-        showOrders("account_id = " + account.getId());
+        showOrders(account.getId());
     }
 }

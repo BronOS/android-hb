@@ -3,6 +3,7 @@ package com.bronos.hb;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import com.bronos.hb.ds.CategoriesDataSource;
+import com.bronos.hb.model.Account;
 import com.bronos.hb.model.Category;
 
 import java.util.ArrayList;
@@ -190,5 +192,13 @@ public class CategoriesActivity extends ListActivity {
     protected void onPause() {
         datasource.close();
         super.onPause();
+    }
+
+    @Override
+    public void onListItemClick(ListView parent, View view, int position, long id) {
+        final Category category = (Category) getListAdapter().getItem(position);
+        Intent intent = new Intent(this, OrdersActivity.class);
+        intent.putExtra("category", category.getId());
+        startActivity(intent);
     }
 }

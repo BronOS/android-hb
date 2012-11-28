@@ -3,8 +3,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add"
           android:title="@string/add" />
-    <item android:id="@+id/categories"
-          android:title="@string/categories" />
-    <item android:id="@+id/orders"
-          android:title="@string/orders" />
+    <item android:id="@+id/filter"
+          android:title="@string/filter" />
 </menu>

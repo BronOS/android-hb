@@ -34,19 +34,17 @@ public class HBActivity extends ListActivity {
 
         showList();
 
-        ListView list = (ListView)getListView();
+        ListView list = (ListView) getListView();
         registerForContextMenu(list);
     }
 
-    private void showList()
-    {
+    private void showList() {
         List<Account> values = datasource.getAllAccounts();
         ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
     }
 
-    private void addCancelButtonToMenu(AlertDialog.Builder builder)
-    {
+    private void addCancelButtonToMenu(AlertDialog.Builder builder) {
         builder.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -54,8 +52,7 @@ public class HBActivity extends ListActivity {
         });
     }
 
-    private void addAccount()
-    {
+    private void addAccount() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle(R.string.add_account);
@@ -75,10 +72,9 @@ public class HBActivity extends ListActivity {
         builder.show();
     }
 
-    private void editAccount(MenuItem item)
-    {
+    private void editAccount(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final Account account = (Account)getListAdapter().getItem(info.position);
+        final Account account = (Account) getListAdapter().getItem(info.position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -101,10 +97,16 @@ public class HBActivity extends ListActivity {
         builder.show();
     }
 
-    private void removeAccount(MenuItem item)
-    {
+    /**
+     * Remove account by selected item.
+     *
+     * @param item Selected item.
+     *
+     * @return void
+     */
+    private void removeAccount(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final Account account = (Account)getListAdapter().getItem(info.position);
+        final Account account = (Account) getListAdapter().getItem(info.position);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -121,6 +123,27 @@ public class HBActivity extends ListActivity {
         addCancelButtonToMenu(builder);
 
         builder.show();
+    }
+
+    /**
+     * Shows categories activity.
+     *
+     * @return void
+     */
+    private void showCategories() {
+        Intent intent = new Intent(this, CategoriesActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Shows orders activity.
+     *
+     * @return void
+     */
+    private void showOrders(String filter) {
+        Intent intent = new Intent(this, OrdersActivity.class);
+        intent.putExtra("filter", filter);
+        startActivity(intent);
     }
 
     @Override
@@ -146,9 +169,10 @@ public class HBActivity extends ListActivity {
                 addAccount();
                 return true;
             case R.id.categories:
-                Intent intent = new Intent(this, CategoriesActivity.class);
-//                intent.setData(Uri.parse("content://uri_to_my_object"));
-                startActivity(intent);
+                showCategories();
+                return true;
+            case R.id.orders:
+                showOrders(null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -182,9 +206,8 @@ public class HBActivity extends ListActivity {
     }
 
     @Override
-    public void onListItemClick(ListView parent, View view, int position, long id)
-    {
-        final Account account = (Account)getListAdapter().getItem(position);
-        view.setEnabled(false);
+    public void onListItemClick(ListView parent, View view, int position, long id) {
+        final Account account = (Account) getListAdapter().getItem(position);
+        showOrders("account_id = " + account.getId());
     }
 }

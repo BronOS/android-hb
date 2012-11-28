@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class HBSQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hb.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String TABLE_ID = "_id";
 
@@ -32,12 +32,13 @@ public class HBSQLiteHelper extends SQLiteOpenHelper {
             "    " + TABLE_ID + " INTEGER PRIMARY KEY autoincrement," +
             "    user_id INTEGER DEFAULT 0," +
             "    category_id INTEGER DEFAULT 0," +
+            "    category_title TEXT DEFAULT NULL," +
             "    account_id INTEGER DEFAULT 0," +
             "    type INTEGER DEFAULT 1," +
             "    created_at INTEGER DEFAULT 0," +
             "    updated_at INTEGER DEFAULT 0," +
             "    order_sum REAL DEFAULT 0," +
-            "    description TEXT NOT NULL" +
+            "    description TEXT DEFAULT NULL" +
             ");";
     private static final String DATABASE_DELETE_ACCOUNTS =
             "DROP TABLE IF EXISTS " + TABLE_ACCOUNTS + ";";

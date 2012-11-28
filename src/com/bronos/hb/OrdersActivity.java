@@ -2,6 +2,7 @@ package com.bronos.hb;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,7 +70,9 @@ public class OrdersActivity extends ListActivity {
      * Open activity "EditOrderActivity" for creating new order.
      */
     private void addItem() {
-
+        Intent intent = new Intent(this, EditOrderActivity.class);
+        // TODO: set EditOrderAccount extra vars by this filter.
+        startActivity(intent);
     }
 
     @Override
@@ -91,4 +94,15 @@ public class OrdersActivity extends ListActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
+    }
 }

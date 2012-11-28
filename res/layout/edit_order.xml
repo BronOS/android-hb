@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list"
+            android:text="@string/accounts"
+            android:id="@+id/account" android:clickable="true"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list"
+            android:text="@string/categories"
+            android:id="@+id/category" android:clickable="true"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list"
+            android:text="@string/type"
+            android:id="@+id/type" android:clickable="true"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sum"
+            android:id="@+id/sumTitle"/>
+    <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sum" android:singleLine="true" android:selectAllOnFocus="true" android:numeric="decimal"
+            android:phoneNumber="false" android:inputType="numberDecimal"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:id="@+id/descriptionTitle" android:layout_gravity="left|center_vertical"/>
+    <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="90dp"
+            android:id="@+id/editText" android:layout_gravity="left|center_vertical" android:selectAllOnFocus="true" />
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:id="@+id/save" android:layout_gravity="left|center_vertical"/>
+</LinearLayout>
+
+

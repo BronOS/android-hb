@@ -6,11 +6,14 @@
     <string name="categories">Categories</string>
     <string name="root_category">Root</string>
     <string name="add_category">Add New Category</string>
+    <string name="add_order">Add New Order</string>
     <string name="add_category_select_category">Choose Parent Category</string>
     <string name="add_category_title">Fill Category Title</string>
     <string name="add_account">Add New Account</string>
     <string name="edit_category">Edit Category</string>
     <string name="edit_account">Edit Account</string>
+    <string name="edit_order">Edit Order</string>
+    <string name="remove_order">Remove Order</string>
     <string name="remove_account">Remove Account</string>
     <string name="remove_category">Remove Category</string>
     <string name="remove_account_description">All orders in this account will be removed.</string>
@@ -22,4 +25,10 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="filter">Filter</string>
+    <string name="type">Type</string>
+    <string name="sum">Sum:</string>
+    <string name="description">Description:</string>
+    <string name="save">Save</string>
+    <string name="type_income">(+) Income</string>
+    <string name="type_outgo">(-) Outgo</string>
 </resources>

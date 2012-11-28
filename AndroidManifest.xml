@@ -13,6 +13,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".OrdersActivity" android:label="@string/orders"/>
-        <activity android:name=".CategoriesActivity" android:label="Categories"/>
+        <activity android:name=".CategoriesActivity" android:label="@string/categories"/>
+        <activity android:name=".EditOrderActivity" android:label="@string/add_order"/>
     </application>
 </manifest> 

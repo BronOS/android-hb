@@ -128,6 +128,7 @@ public class CategoriesActivity extends ListActivity {
 
         builder.setPositiveButton(this.getString(R.string.remove), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                // TODO: remove orders.
                 datasource.delete(category);
                 showList();
             }
@@ -177,5 +178,17 @@ public class CategoriesActivity extends ListActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        datasource.open();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        datasource.close();
+        super.onPause();
     }
 }

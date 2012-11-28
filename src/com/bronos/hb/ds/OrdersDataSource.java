@@ -30,6 +30,8 @@ public class OrdersDataSource {
             "order_sum",
             "description"
     };
+    final static public int TYPE_INCOME = 1;
+    final static public int TYPE_OUTGO = 0;
 
     public OrdersDataSource(Context context) {
         dbHelper = new HBSQLiteHelper(context);

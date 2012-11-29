@@ -154,7 +154,7 @@ public class HBActivity extends ListActivity {
             intent.putExtra("account", accountId);
         }
 
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -220,5 +220,12 @@ public class HBActivity extends ListActivity {
     public void onListItemClick(ListView parent, View view, int position, long id) {
         final Account account = (Account) getListAdapter().getItem(position);
         showOrders(account.getId());
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        datasource.open();
+        showList();
     }
 }

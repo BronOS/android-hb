@@ -1,14 +1,16 @@
 package com.bronos.hb;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.*;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.ds.CategoriesDataSource;
@@ -50,6 +52,9 @@ public class OrdersActivity extends ListActivity {
      */
     private Category selectedCategory;
 
+    private int paging_row = 0;
+    private int paging_offset = 3;
+
     final static private int REQUEST_CODE_EDIT = 1;
     final static private int REQUEST_CODE_ADD = 2;
     final static private int REQUEST_CODE_FILTER = 3;
@@ -72,8 +77,6 @@ public class OrdersActivity extends ListActivity {
 
         ListView list = getListView();
         registerForContextMenu(list);
-
-        // TODO: on delete/create/update change account amount.
     }
 
     private void setFilters(Intent intent) {
@@ -128,7 +131,7 @@ public class OrdersActivity extends ListActivity {
             titleList.add(getString(R.string.type_outgo));
         }
 
-        setTitle(TextUtils.join("|", titleList));
+        setTitle(TextUtils.join(" > ", titleList));
     }
 
     /**
@@ -137,10 +140,35 @@ public class OrdersActivity extends ListActivity {
      * @return void
      */
     private void showList() {
-        List<Order> values = datasource.getAll(getFilter());
+        String filter = getFilter();
+        setPagination(filter);
+        List<Order> values = datasource.getAll(filter, paging_row + "," + paging_offset);
         ArrayAdapter<Order> adapter = new ArrayAdapter<Order>(this, android.R.layout.simple_list_item_1, values);
         setTitleWithFilters();
         setListAdapter(adapter);
+    }
+
+    private void setPagination(String filter) {
+        Button firstBtn = (Button)findViewById(R.id.first);
+        Button prevBtn = (Button)findViewById(R.id.prev);
+        Button nextBtn = (Button)findViewById(R.id.next);
+        Button lastBtn = (Button)findViewById(R.id.last);
+
+        if (paging_row > 0) {
+            firstBtn.setEnabled(true);
+            prevBtn.setEnabled(true);
+        } else {
+            firstBtn.setEnabled(false);
+            prevBtn.setEnabled(false);
+        }
+
+        if (datasource.getCount(filter) > (paging_row + paging_offset)) {
+            nextBtn.setEnabled(true);
+            lastBtn.setEnabled(true);
+        } else {
+            nextBtn.setEnabled(false);
+            lastBtn.setEnabled(false);
+        }
     }
 
     private String getFilter() {
@@ -159,6 +187,7 @@ public class OrdersActivity extends ListActivity {
         }
 
         // TODO: implement search.
+        // TODO: implement paging.
 
         return filter.size() > 0 ? TextUtils.join(" AND ", filter) : null;
     }
@@ -189,6 +218,90 @@ public class OrdersActivity extends ListActivity {
         intent.putExtra("account", selectedAccount.getId());
 
         startActivityForResult(intent, REQUEST_CODE_ADD);
+    }
+
+    /**
+     * Open activity "EditOrderActivity" for editing order.
+     */
+    private void editItem(MenuItem item) {
+        Intent intent = new Intent(this, EditOrderActivity.class);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final Order order = (Order) getListAdapter().getItem(info.position);
+        intent.putExtra("order", order.getId());
+        startActivityForResult(intent, REQUEST_CODE_EDIT);
+    }
+
+    /**
+     * Adds cancel button to the dialog.
+     *
+     * @param builder
+     */
+    private void addCancelButtonToMenu(AlertDialog.Builder builder) {
+        builder.setNegativeButton(this.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+    }
+
+    /**
+     * Remove order.
+     */
+    private void removeItem(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final Order order = (Order) getListAdapter().getItem(info.position);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.remove_order);
+        builder.setMessage(R.string.remove_order_description);
+
+        builder.setPositiveButton(this.getString(R.string.remove), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                AccountsDataSource accountsDataSource = new AccountsDataSource(getApplicationContext());
+                accountsDataSource.open();
+                double sum = order.getOrderSum();
+                Account account = accountsDataSource.getAccount(order.getAccountId());
+                if (order.getType() == OrdersDataSource.TYPE_INCOME) {
+                    sum *= -1;
+                }
+                account.setAmount(new Float(account.getAmount() + sum));
+                accountsDataSource.updateAccount(account);
+                if (selectedAccount.getId() == account.getId()) {
+                    selectedAccount = account;
+                }
+                accountsDataSource.close();
+
+                datasource.delete(order);
+                showList();
+            }
+        });
+
+        addCancelButtonToMenu(builder);
+
+        builder.show();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle(getString(R.string.manage_account));
+        menu.add(0, ACCOUNTS_MENU_EDIT, ACCOUNTS_MENU_EDIT, R.string.edit);
+        menu.add(0, ACCOUNTS_MENU_REMOVE, ACCOUNTS_MENU_REMOVE, R.string.remove);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case ACCOUNTS_MENU_EDIT:
+                editItem(item);
+                return true;
+            case ACCOUNTS_MENU_REMOVE:
+                removeItem(item);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
@@ -231,6 +344,11 @@ public class OrdersActivity extends ListActivity {
 
         if (requestCode == REQUEST_CODE_FILTER) {
             setFilters(data);
+        } else if (selectedAccount.getId() > 0) {
+            AccountsDataSource accountsDataSource = new AccountsDataSource(this);
+            accountsDataSource.open();
+            selectedAccount = accountsDataSource.getAccount(selectedAccount.getId());
+            accountsDataSource.close();
         }
 
         showList();

@@ -97,6 +97,11 @@ public class Order {
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
-        return categoryTitle + ": <b>" + orderSum + "</b>\n" + description;
+        return  (type == OrdersDataSource.TYPE_OUTGO ? "- " : "+ ") +
+                categoryTitle +
+                ": " +
+                orderSum +
+                "\n" +
+                description;
     }
 }

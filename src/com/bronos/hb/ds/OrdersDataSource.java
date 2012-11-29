@@ -51,6 +51,7 @@ public class OrdersDataSource {
         values.put("category_id", categoryId);
         values.put("category_title", categoryTitle);
         values.put("account_id", accountId);
+        values.put("type", type);
         values.put("created_at", utc);
         values.put("updated_at", utc);
         values.put("order_sum", sum);
@@ -85,14 +86,33 @@ public class OrdersDataSource {
         database.delete(HBSQLiteHelper.TABLE_ORDERS, HBSQLiteHelper.TABLE_ID + " = " + id, null);
     }
 
+    public int getCount(String filter) {
+        if (filter != null) {
+            filter = " WHERE " + filter;
+        } else {
+            filter = "";
+        }
+
+        Cursor mCount= database.rawQuery("select count(*) from " + HBSQLiteHelper.TABLE_ORDERS + filter, null);
+        mCount.moveToFirst();
+        int count= mCount.getInt(0);
+        mCount.close();
+
+        return count;
+    }
+
     public List<Order> getAll() {
         return getAll(null);
     }
 
     public List<Order> getAll(String filter) {
+        return getAll(filter, null);
+    }
+
+    public List<Order> getAll(String filter, String limit) {
         List<Order> list = new ArrayList<Order>();
 
-        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ORDERS, allColumns, filter, null, null, null, "created_at DESC");
+        Cursor cursor = database.query(HBSQLiteHelper.TABLE_ORDERS, allColumns, filter, null, null, null, "created_at DESC", limit);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

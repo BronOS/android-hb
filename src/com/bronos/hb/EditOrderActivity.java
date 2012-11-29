@@ -13,6 +13,7 @@ import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.ds.OrdersDataSource;
 import com.bronos.hb.model.Account;
 import com.bronos.hb.model.Category;
+import com.bronos.hb.model.Order;
 import com.bronos.hb.model.Type;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class EditOrderActivity extends Activity {
      * Selected category.
      */
     private Category selectedCategory;
+    /**
+     * Selected order.
+     */
+    private Order selectedOrder;
 
     /**
      * Create new activity.
@@ -54,6 +59,10 @@ public class EditOrderActivity extends Activity {
         setAccountView();
         setCategoryView();
 
+        if (selectedOrder.getId() > 0) {
+            setEditView();
+        }
+
         final EditOrderActivity context = this;
         Button saveButton = (Button) findViewById(R.id.save);
         saveButton.setOnClickListener(new TextView.OnClickListener() {
@@ -68,21 +77,38 @@ public class EditOrderActivity extends Activity {
                 } else if (sum == 0) {
                     showToast(getString(R.string.edit_order_choose_sum_message));
                 } else {
-                    datasource.create(
-                            selectedCategory.getId(),
-                            selectedCategory.toString(),
-                            selectedAccount.getId(),
-                            selectedTypeId,
-                            sum,
-                            descriptionView.getText().toString()
-                    );
+                    if (selectedOrder.getId() > 0) {
+                        double oldSum = selectedOrder.getOrderSum();
+                        if (selectedOrder.getType() == OrdersDataSource.TYPE_INCOME) {
+                            oldSum *= -1;
+                        }
+                        selectedAccount.setAmount(new Float(selectedAccount.getAmount() + oldSum));
 
-                    AccountsDataSource accountsDataSource = new AccountsDataSource(context);
-                    accountsDataSource.open();
+                        selectedOrder.setCategoryId(selectedCategory.getId());
+                        selectedOrder.setCategoryTitle(selectedCategory.toString());
+                        selectedOrder.setAccountId(selectedAccount.getId());
+                        selectedOrder.setType(selectedTypeId);
+                        selectedOrder.setOrderSum(sum);
+                        selectedOrder.setDescription(descriptionView.getText().toString());
+                        datasource.update(selectedOrder);
+                    } else {
+                        datasource.create(
+                                selectedCategory.getId(),
+                                selectedCategory.toString(),
+                                selectedAccount.getId(),
+                                selectedTypeId,
+                                sum,
+                                descriptionView.getText().toString()
+                        );
+                    }
+
                     if (selectedTypeId == OrdersDataSource.TYPE_OUTGO) {
                         sum *= -1;
                     }
                     selectedAccount.setAmount(new Float(selectedAccount.getAmount() + sum));
+
+                    AccountsDataSource accountsDataSource = new AccountsDataSource(context);
+                    accountsDataSource.open();
                     accountsDataSource.updateAccount(selectedAccount);
                     accountsDataSource.close();
 
@@ -101,9 +127,28 @@ public class EditOrderActivity extends Activity {
     }
 
     private void setSelecteds(Intent intent) {
-        selectedTypeId = intent.getIntExtra("type", 0);
+        long orderId = intent.getLongExtra("order", 0);
+        if (orderId > 0) {
+            selectedOrder = datasource.get(orderId);
+            setSelecteds(
+                selectedOrder.getType(),
+                selectedOrder.getAccountId(),
+                selectedOrder.getCategoryId()
+            );
+        } else {
+            setSelecteds(
+                intent.getIntExtra("type", 0),
+                intent.getLongExtra("account", 0),
+                intent.getLongExtra("category", 0)
+            );
+            selectedOrder = new Order();
+            selectedOrder.setId(0);
+        }
+    }
 
-        long accountId = intent.getLongExtra("account", 0);
+    private void setSelecteds(int typeId, long accountId, long categoryId) {
+        selectedTypeId = typeId;
+
         if (accountId > 0) {
             AccountsDataSource accountsDataSource = new AccountsDataSource(this);
             accountsDataSource.open();
@@ -117,7 +162,6 @@ public class EditOrderActivity extends Activity {
             selectedAccount.setAmount(new Float(0));
         }
 
-        long categoryId = intent.getLongExtra("category", 0);
         if (categoryId > 0) {
             CategoriesDataSource categoriesDataSource = new CategoriesDataSource(this);
             categoriesDataSource.open();
@@ -292,6 +336,17 @@ public class EditOrderActivity extends Activity {
                 builderCategories.show();
             }
         });
+    }
+
+    /**
+     * Sets sum and description views.
+     */
+    private void setEditView() {
+        EditText sumView = (EditText) findViewById(R.id.sum);
+        sumView.setText(selectedOrder.getOrderSum() + "");
+
+        EditText descView = (EditText) findViewById(R.id.description);
+        descView.setText(selectedOrder.getDescription());
     }
 
     @Override

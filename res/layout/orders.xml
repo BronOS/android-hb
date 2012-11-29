@@ -4,6 +4,31 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_first"
+                android:id="@+id/first" android:enabled="false"/>
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_prev"
+                android:id="@+id/prev" android:layout_marginLeft="72dp" android:enabled="false"/>
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_next"
+                android:id="@+id/next" android:layout_marginRight="72dp"
+                android:layout_alignParentRight="true" android:enabled="false"/>
+        <Button
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_last"
+                android:id="@+id/last" android:layout_alignParentRight="true" android:enabled="false"/>
+    </RelativeLayout>
     <ListView
             android:id="@android:id/list"
             android:layout_width="fill_parent"

@@ -222,7 +222,6 @@ public class HBActivity extends ListActivity {
         showOrders(account.getId());
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         datasource.open();

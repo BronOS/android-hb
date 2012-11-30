@@ -41,10 +41,16 @@ public class Category {
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {
+        return toString(true);
+    }
+
+    public String toString(boolean includeSpace) {
         String space = "";
 
-        for (int x =  0; x < level; x++) {
-            space += "      ";
+        if (includeSpace) {
+            for (int x =  0; x < level; x++) {
+                space += "      ";
+            }
         }
 
         return space + title;

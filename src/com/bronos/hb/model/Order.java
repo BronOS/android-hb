@@ -100,6 +100,7 @@ public class Order {
         return  (type == OrdersDataSource.TYPE_OUTGO ? "- " : "+ ") +
                 categoryTitle +
                 ": " +
+                (type == OrdersDataSource.TYPE_OUTGO ? "-" : "+") +
                 orderSum +
                 "\n" +
                 description;

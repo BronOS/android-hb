@@ -53,7 +53,7 @@ public class OrdersActivity extends ListActivity {
     private Category selectedCategory;
 
     private int paging_row = 0;
-    private int paging_offset = 3;
+    private int paging_offset = 30;
 
     final static private int REQUEST_CODE_EDIT = 1;
     final static private int REQUEST_CODE_ADD = 2;
@@ -120,7 +120,7 @@ public class OrdersActivity extends ListActivity {
         }
 
         if (selectedCategory.getId() > 0) {
-            titleList.add(selectedCategory.toString());
+            titleList.add(selectedCategory.toString(false));
         }
 
         if (selectedTypeId == OrdersDataSource.TYPE_INCOME) {
@@ -156,19 +156,34 @@ public class OrdersActivity extends ListActivity {
 
         if (paging_row > 0) {
             firstBtn.setEnabled(true);
+            setPagingButton(firstBtn, 0);
             prevBtn.setEnabled(true);
+            int row = paging_row - paging_offset;
+            setPagingButton(prevBtn, row < 0 ? 0 : row);
         } else {
             firstBtn.setEnabled(false);
             prevBtn.setEnabled(false);
         }
 
-        if (datasource.getCount(filter) > (paging_row + paging_offset)) {
+        int count = datasource.getCount(filter);
+        if (count > (paging_row + paging_offset)) {
             nextBtn.setEnabled(true);
+            setPagingButton(nextBtn, paging_row + paging_offset);
             lastBtn.setEnabled(true);
+            setPagingButton(lastBtn, count / paging_offset * paging_offset);
         } else {
             nextBtn.setEnabled(false);
             lastBtn.setEnabled(false);
         }
+    }
+
+    private void setPagingButton(Button button, final int row) {
+        button.setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View view) {
+                paging_row = row;
+                showList();
+            }
+        });
     }
 
     private String getFilter() {
@@ -187,7 +202,6 @@ public class OrdersActivity extends ListActivity {
         }
 
         // TODO: implement search.
-        // TODO: implement paging.
 
         return filter.size() > 0 ? TextUtils.join(" AND ", filter) : null;
     }
@@ -224,9 +238,13 @@ public class OrdersActivity extends ListActivity {
      * Open activity "EditOrderActivity" for editing order.
      */
     private void editItem(MenuItem item) {
-        Intent intent = new Intent(this, EditOrderActivity.class);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final Order order = (Order) getListAdapter().getItem(info.position);
+        editItem(order);
+    }
+
+    private void editItem(Order order) {
+        Intent intent = new Intent(this, EditOrderActivity.class);
         intent.putExtra("order", order.getId());
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
@@ -352,5 +370,11 @@ public class OrdersActivity extends ListActivity {
         }
 
         showList();
+    }
+
+    @Override
+    public void onListItemClick(ListView parent, View view, int position, long id) {
+        final Order order = (Order) getListAdapter().getItem(position);
+        editItem(order);
     }
 }

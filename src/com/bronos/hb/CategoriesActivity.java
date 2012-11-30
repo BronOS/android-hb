@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.AdapterView;
@@ -89,7 +90,11 @@ public class CategoriesActivity extends ListActivity {
 
         addCancelButtonToMenu(builder);
 
-        builder.show();
+        AlertDialog dialog = builder.create();
+        // TODO: set custom text color or custom item layout.
+//        dialog.getListView().setBackgroundColor(-256);
+
+        dialog.show();
     }
 
     private void editItem(MenuItem item)

@@ -10,10 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import com.bronos.hb.adapter.AccountsAdapter;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.model.Account;
 import com.bronos.hb.model.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HBActivity extends ListActivity {
@@ -39,7 +41,7 @@ public class HBActivity extends ListActivity {
     }
 
     private void showList() {
-        List<Account> values = datasource.getAllAccounts();
+        ArrayList<Account> values = (ArrayList)datasource.getAllAccounts();
 
         double sum = 0;
         for (Account account: values) {
@@ -47,7 +49,7 @@ public class HBActivity extends ListActivity {
         }
         setTitle(getString(R.string.accounts) + "|" + getString(R.string.total) + ": " + sum);
 
-        ArrayAdapter<Account> adapter = new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
+        AccountsAdapter adapter = new AccountsAdapter(this, R.layout.account_row, values);
         setListAdapter(adapter);
     }
 

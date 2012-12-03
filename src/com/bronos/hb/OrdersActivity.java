@@ -207,6 +207,7 @@ public class OrdersActivity extends ListActivity {
         }
 
         // TODO: implement search.
+        // TODO: implement filter by dates range.
 
         return filter.size() > 0 ? TextUtils.join(" AND ", filter) : null;
     }

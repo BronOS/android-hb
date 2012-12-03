@@ -92,8 +92,6 @@ public class CategoriesActivity extends ListActivity {
         addCancelButtonToMenu(builder);
 
         AlertDialog dialog = builder.create();
-        // TODO: set custom text color or custom item layout.
-//        dialog.getListView().setBackgroundColor(-256);
 
         dialog.show();
     }

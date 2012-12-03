@@ -14,6 +14,7 @@ public class HBSQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_ORDERS = "orders";
     public static final String TABLE_CATEGORIES = "categories";
 
+    // TODO: Implement import export fields.
     private static final String DATABASE_CREATE_ACCOUNTS =
             "CREATE TABLE " + TABLE_ACCOUNTS + "(" +
             "    " + TABLE_ID + " INTEGER PRIMARY KEY autoincrement," +

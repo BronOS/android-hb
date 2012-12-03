@@ -4,36 +4,96 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_order_account"
-            android:id="@+id/accountTitle" />
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/list"
-            android:id="@+id/account" android:clickable="true" android:textStyle="bold" android:gravity="center"
-            android:textSize="18dp"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_order_category"
-            android:id="@+id/categoryTitle" />
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/list"
-            android:id="@+id/category" android:clickable="true" android:textStyle="bold" android:gravity="center"
-            android:textSize="18dp"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_order_type"
-            android:id="@+id/typeTitle" />
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/list"
-            android:id="@+id/type" android:clickable="true" android:textStyle="bold" android:gravity="center"
-            android:textSize="18dp"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?android:attr/listPreferredItemHeight"
+                    android:id="@+id/account_row"
+                    android:padding="6dip"
+                    android:clickable="true">
+
+        <ImageView
+                android:id="@+id/account_icon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="6dip"
+
+                android:src="@drawable/account" />
+
+        <TextView
+                android:id="@+id/account_sum"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentTop="false" android:layout_centerVertical="true"/>
+
+        <TextView
+                android:id="@+id/account"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/account_icon" android:ellipsize="marquee" android:textStyle="bold"
+                android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false" android:layout_centerVertical="true"
+                />
+    </RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?android:attr/listPreferredItemHeight"
+                    android:id="@+id/category_row"
+                    android:clickable="true"
+                    android:padding="6dip">
+
+        <ImageView
+                android:id="@+id/category_icon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dip"
+
+                android:src="@drawable/category" android:layout_marginLeft="0dp"/>
+
+        <TextView
+                android:id="@+id/category"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/category_icon" android:ellipsize="marquee"
+                android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?android:attr/listPreferredItemHeight"
+                    android:id="@+id/type_row"
+                    android:clickable="true"
+                    android:padding="6dip">
+        <ImageView
+                android:id="@+id/type_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dip"
+                android:src="@drawable/type" android:layout_marginLeft="0dp"/>
+
+        <TextView
+                android:id="@+id/type"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/type_icon" android:ellipsize="marquee"
+                android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
+    </RelativeLayout>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.*;
 import com.bronos.hb.adapter.AccountsAdapter;
 import com.bronos.hb.adapter.CategoriesAdapter;
+import com.bronos.hb.adapter.TypeAdapter;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.ds.OrdersDataSource;
@@ -96,7 +97,7 @@ public class EditOrderActivity extends Activity {
                     } else {
                         datasource.create(
                                 selectedCategory.getId(),
-                                selectedCategory.toString(),
+                                selectedCategory.getTitle(),
                                 selectedAccount.getId(),
                                 selectedTypeId,
                                 sum,
@@ -137,6 +138,7 @@ public class EditOrderActivity extends Activity {
                 selectedOrder.getAccountId(),
                 selectedOrder.getCategoryId()
             );
+            setTitle(R.string.edit_order);
         } else {
             setSelecteds(
                 intent.getIntExtra("type", 0),
@@ -199,12 +201,12 @@ public class EditOrderActivity extends Activity {
      * @return ArrayAdapter<Type>
      */
     private ArrayAdapter<Type> getTypeAdapter() {
-        final List<Type> values = new ArrayList<Type>();
+        final ArrayList<Type> values = new ArrayList<Type>();
         Type incomeType = new Type(OrdersDataSource.TYPE_INCOME, getString(R.string.type_income));
         Type outgoType = new Type(OrdersDataSource.TYPE_OUTGO, getString(R.string.type_outgo));
         values.add(outgoType);
         values.add(incomeType);
-        return new ArrayAdapter<Type>(this, android.R.layout.simple_list_item_1, values);
+        return new TypeAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -245,15 +247,19 @@ public class EditOrderActivity extends Activity {
     private void setTypeView() {
         final EditOrderActivity context = this;
 
+        RelativeLayout typeRow = (RelativeLayout) findViewById(R.id.type_row);
         TextView type = (TextView) findViewById(R.id.type);
+        ImageView iv = (ImageView) findViewById(R.id.type_icon);
 
         if (selectedTypeId == OrdersDataSource.TYPE_INCOME) {
             type.setText(R.string.type_income);
+            iv.setImageResource(R.drawable.plus);
         } else if (selectedTypeId == OrdersDataSource.TYPE_OUTGO) {
             type.setText(R.string.type_outgo);
+            iv.setImageResource(R.drawable.minus);
         }
 
-        type.setOnClickListener(new TextView.OnClickListener() {
+        typeRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderTypes = new AlertDialog.Builder(context);
                 builderTypes.setCancelable(false);

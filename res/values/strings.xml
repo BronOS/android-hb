@@ -28,11 +28,11 @@
     <string name="cancel">Cancel</string>
     <string name="filter">Filter</string>
     <string name="type">Type</string>
-    <string name="sum">Sum:</string>
-    <string name="description">Description:</string>
+    <string name="sum">Sum</string>
+    <string name="description">Description</string>
     <string name="save">Save</string>
-    <string name="type_income">(+) Income</string>
-    <string name="type_outgo">(-) Outgo</string>
+    <string name="type_income">Income</string>
+    <string name="type_outgo">Outgo</string>
 
     <string name="edit_order_category">Category:</string>
     <string name="edit_order_account">Account:</string>

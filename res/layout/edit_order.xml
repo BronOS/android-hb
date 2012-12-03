@@ -46,7 +46,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="?android:attr/listPreferredItemHeight"
                     android:id="@+id/category_row"
-
+                    android:clickable="true"
                     android:padding="6dip">
 
         <ImageView
@@ -71,35 +71,42 @@
                 android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
     </RelativeLayout>
 
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/edit_order_type"
-            android:id="@+id/typeTitle" />
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/list"
-            android:id="@+id/type" android:clickable="true" android:textStyle="bold" android:gravity="center"
-            android:textSize="18dp"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sum"
-            android:id="@+id/sumTitle"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="?android:attr/listPreferredItemHeight"
+                    android:id="@+id/type_row"
+                    android:clickable="true"
+                    android:padding="6dip">
+
+        <ImageView
+                android:id="@+id/type_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="10dip"
+
+                android:src="@drawable/type" android:layout_marginLeft="0dp"/>
+
+        <TextView
+                android:id="@+id/type"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/type_icon" android:ellipsize="marquee"
+                android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+                android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
     <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sum" android:singleLine="true" android:selectAllOnFocus="true" android:numeric="decimal"
-            android:phoneNumber="false" android:inputType="numberDecimal"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:id="@+id/descriptionTitle" android:layout_gravity="left|center_vertical"/>
+            android:phoneNumber="false" android:inputType="numberDecimal" android:hint="@string/sum"/>
     <EditText
             android:layout_width="fill_parent"
             android:layout_height="90dp"
-            android:id="@+id/description" android:layout_gravity="left|center_vertical" android:selectAllOnFocus="true" />
+            android:id="@+id/description" android:layout_gravity="left|center_vertical" android:selectAllOnFocus="true"
+            android:hint="@string/description"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

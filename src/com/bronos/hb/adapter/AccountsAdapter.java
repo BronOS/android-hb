@@ -33,10 +33,18 @@ public class AccountsAdapter extends ArrayAdapter {
             TextView tt = (TextView) v.findViewById(R.id.toptext);
             TextView bt = (TextView) v.findViewById(R.id.bottomtext);
             if (tt != null) {
-                tt.setText(account.getTitle() + ":");
+                String title = account.getTitle();
+                if (account.getId() > 0) {
+                    title += ":";
+                }
+                tt.setText(title);
             }
             if(bt != null){
-                bt.setText(account.getAmount().toString());
+                String sum = "";
+                if (account.getId() > 0) {
+                    sum = account.getAmount().toString();
+                }
+                bt.setText(sum);
                 if (account.getAmount() < 1000) {
                     bt.setTextColor(Color.parseColor("#F0C5D6"));
                 } else if (account.getAmount() < 100) {

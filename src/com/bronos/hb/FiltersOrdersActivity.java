@@ -6,9 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.*;
+import com.bronos.hb.adapter.AccountsAdapter;
+import com.bronos.hb.adapter.CategoriesAdapter;
+import com.bronos.hb.adapter.TypeAdapter;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.ds.OrdersDataSource;
@@ -83,14 +84,14 @@ public class FiltersOrdersActivity extends Activity {
      * @return ArrayAdapter<Type>
      */
     private ArrayAdapter<Type> getTypeAdapter() {
-        final List<Type> values = new ArrayList<Type>();
+        final ArrayList<Type> values = new ArrayList<Type>();
         Type noneType = new Type(-1, "-");
         Type incomeType = new Type(OrdersDataSource.TYPE_INCOME, getString(R.string.type_income));
         Type outgoType = new Type(OrdersDataSource.TYPE_OUTGO, getString(R.string.type_outgo));
         values.add(noneType);
         values.add(outgoType);
         values.add(incomeType);
-        return new ArrayAdapter<Type>(this, android.R.layout.simple_list_item_1, values);
+        return new TypeAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -99,7 +100,7 @@ public class FiltersOrdersActivity extends Activity {
      * @return ArrayAdapter<Type>
      */
     private ArrayAdapter<Account> getAccountAdapter() {
-        final List<Account> values = new ArrayList<Account>();
+        final ArrayList<Account> values = new ArrayList<Account>();
         Account noneAccount = new Account();
         noneAccount.setId(0);
         noneAccount.setTitle("-");
@@ -111,7 +112,7 @@ public class FiltersOrdersActivity extends Activity {
         values.addAll(accountsDataSource.getAllAccounts());
         accountsDataSource.close();
 
-        return new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
+        return new AccountsAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -121,14 +122,18 @@ public class FiltersOrdersActivity extends Activity {
         final FiltersOrdersActivity context = this;
 
         TextView account = (TextView) findViewById(R.id.account);
+        TextView accountSum = (TextView) findViewById(R.id.account_sum);
+        RelativeLayout accountRow = (RelativeLayout) findViewById(R.id.account_row);
 
         if (selectedAccount.getId() > 0) {
-            account.setText(selectedAccount.toString());
+            account.setText(selectedAccount.getTitle());
+            accountSum.setText("" + selectedAccount.getAmount());
         } else {
             account.setText("-");
+            accountSum.setText("");
         }
 
-        account.setOnClickListener(new TextView.OnClickListener() {
+        accountRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderAccounts = new AlertDialog.Builder(context);
                 builderAccounts.setCancelable(false);
@@ -155,7 +160,7 @@ public class FiltersOrdersActivity extends Activity {
      * @return ArrayAdapter<Category>
      */
     private ArrayAdapter<Category> getCategoryAdapter() {
-        final List<Category> values = new ArrayList<Category>();
+        final ArrayList<Category> values = new ArrayList<Category>();
 
         Category noneCategory = new Category();
         noneCategory.setId(0);
@@ -168,7 +173,7 @@ public class FiltersOrdersActivity extends Activity {
         values.addAll(categoriesDataSource.getAllSorted());
         categoriesDataSource.close();
 
-        return new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, values);
+        return new CategoriesAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -178,10 +183,11 @@ public class FiltersOrdersActivity extends Activity {
         final FiltersOrdersActivity context = this;
 
         TextView categoryView = (TextView) findViewById(R.id.category);
+        RelativeLayout categoryRow = (RelativeLayout) findViewById(R.id.category_row);
 
-        categoryView.setText(selectedCategory.toString());
+        categoryView.setText(selectedCategory.getTitle());
 
-        categoryView.setOnClickListener(new TextView.OnClickListener() {
+        categoryRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderCategories = new AlertDialog.Builder(context);
                 builderCategories.setCancelable(false);
@@ -209,15 +215,23 @@ public class FiltersOrdersActivity extends Activity {
         final FiltersOrdersActivity context = this;
 
         TextView typeView = (TextView) findViewById(R.id.type);
+        ImageView typeIcon = (ImageView) findViewById(R.id.type_icon);
+        RelativeLayout typeRow = (RelativeLayout) findViewById(R.id.type_row);
+        int iconResource = R.drawable.minus;
+
         if (selectedTypeId == OrdersDataSource.TYPE_INCOME) {
             typeView.setText(getString(R.string.type_income));
+            iconResource = R.drawable.plus;
         } else if (selectedTypeId == OrdersDataSource.TYPE_OUTGO) {
             typeView.setText(getString(R.string.type_outgo));
         } else {
             typeView.setText("-");
+            iconResource = R.drawable.type;
         }
 
-        typeView.setOnClickListener(new TextView.OnClickListener() {
+        typeIcon.setImageResource(iconResource);
+
+        typeRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderTypes = new AlertDialog.Builder(context);
                 builderTypes.setCancelable(false);

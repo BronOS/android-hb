@@ -2,7 +2,9 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add"
+          android:icon="@drawable/add_order"
           android:title="@string/add" />
     <item android:id="@+id/filter"
+          android:icon="@drawable/filter"
           android:title="@string/filter" />
 </menu>

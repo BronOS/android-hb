@@ -8,10 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.*;
+import com.bronos.hb.adapter.OrdersAdapter;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.ds.OrdersDataSource;
@@ -142,8 +140,8 @@ public class OrdersActivity extends ListActivity {
     private void showList() {
         String filter = getFilter();
         setPagination(filter);
-        List<Order> values = datasource.getAll(filter, paging_row + "," + paging_offset);
-        ArrayAdapter<Order> adapter = new ArrayAdapter<Order>(this, android.R.layout.simple_list_item_1, values);
+        ArrayList<Order> values = datasource.getAll(filter, paging_row + "," + paging_offset);
+        OrdersAdapter adapter = new OrdersAdapter(this, android.R.layout.simple_list_item_1, values);
         setTitleWithFilters();
         setListAdapter(adapter);
     }
@@ -175,10 +173,17 @@ public class OrdersActivity extends ListActivity {
             nextBtn.setEnabled(false);
             lastBtn.setEnabled(false);
         }
+//
+//        RelativeLayout rl = (RelativeLayout)findViewById(R.id.pagination);
+//        if (!firstBtn.isEnabled() && !prevBtn.isEnabled() && !nextBtn.isEnabled() && !lastBtn.isEnabled()) {
+//            rl.setVisibility(RelativeLayout.INVISIBLE);
+//        } else {
+//            rl.setVisibility(RelativeLayout.VISIBLE);
+//        }
     }
 
     private void setPagingButton(Button button, final int row) {
-        button.setOnClickListener(new Button.OnClickListener(){
+        button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
                 paging_row = row;
                 showList();
@@ -361,7 +366,9 @@ public class OrdersActivity extends ListActivity {
         datasource.open();
 
         if (requestCode == REQUEST_CODE_FILTER) {
-            setFilters(data);
+            if (data != null) {
+                setFilters(data);
+            }
         } else if (selectedAccount.getId() > 0) {
             AccountsDataSource accountsDataSource = new AccountsDataSource(this);
             accountsDataSource.open();

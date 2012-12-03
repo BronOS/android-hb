@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import com.bronos.hb.adapter.CategoriesAdapter;
 import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.model.Account;
 import com.bronos.hb.model.Category;
@@ -37,8 +38,8 @@ public class CategoriesActivity extends ListActivity {
     }
 
     private void showList() {
-        List<Category> values = datasource.getAllSorted();
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, values);
+        ArrayList<Category> values = (ArrayList)datasource.getAllSorted();
+        CategoriesAdapter adapter = new CategoriesAdapter(this, android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
     }
 
@@ -58,7 +59,7 @@ public class CategoriesActivity extends ListActivity {
         builder.setCancelable(false);
         builder.setTitle(R.string.add_category);
 
-        final List<Category> values = new ArrayList<Category>();
+        final ArrayList<Category> values = new ArrayList<Category>();
         Category rootCategory = new Category();
         rootCategory.setId(0);
         rootCategory.setParentId(0);
@@ -66,7 +67,7 @@ public class CategoriesActivity extends ListActivity {
         rootCategory.setTitle(getString(R.string.root_category));
         values.add(rootCategory);
         values.addAll(datasource.getAllSorted());
-        ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, values);
+        CategoriesAdapter adapter = new CategoriesAdapter(this, android.R.layout.simple_list_item_1, values);
 
         builder.setSingleChoiceItems(adapter, -1, new DialogInterface.OnClickListener() {
             @Override

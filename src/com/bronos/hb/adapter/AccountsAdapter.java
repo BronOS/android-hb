@@ -1,6 +1,7 @@
 package com.bronos.hb.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,15 @@ public class AccountsAdapter extends ArrayAdapter {
             }
             if(bt != null){
                 bt.setText(account.getAmount().toString());
+                if (account.getAmount() < 1000) {
+                    bt.setTextColor(Color.parseColor("#F0C5D6"));
+                } else if (account.getAmount() < 100) {
+                    bt.setTextColor(Color.parseColor("#FF7A7A"));
+                } else if (account.getAmount() < 0) {
+                    bt.setTextColor(Color.RED);
+                } else {
+                    bt.setTextColor(Color.GREEN);
+                }
             }
         }
         return v;

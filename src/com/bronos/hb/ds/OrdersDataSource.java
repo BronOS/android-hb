@@ -109,8 +109,8 @@ public class OrdersDataSource {
         return getAll(filter, null);
     }
 
-    public List<Order> getAll(String filter, String limit) {
-        List<Order> list = new ArrayList<Order>();
+    public ArrayList<Order> getAll(String filter, String limit) {
+        ArrayList<Order> list = new ArrayList<Order>();
 
         Cursor cursor = database.query(HBSQLiteHelper.TABLE_ORDERS, allColumns, filter, null, null, null, "created_at DESC", limit);
 

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
+import com.bronos.hb.adapter.AccountsAdapter;
+import com.bronos.hb.adapter.CategoriesAdapter;
 import com.bronos.hb.ds.AccountsDataSource;
 import com.bronos.hb.ds.CategoriesDataSource;
 import com.bronos.hb.ds.OrdersDataSource;
@@ -85,7 +87,7 @@ public class EditOrderActivity extends Activity {
                         selectedAccount.setAmount(new Float(selectedAccount.getAmount() + oldSum));
 
                         selectedOrder.setCategoryId(selectedCategory.getId());
-                        selectedOrder.setCategoryTitle(selectedCategory.toString());
+                        selectedOrder.setCategoryTitle(selectedCategory.getTitle());
                         selectedOrder.setAccountId(selectedAccount.getId());
                         selectedOrder.setType(selectedTypeId);
                         selectedOrder.setOrderSum(sum);
@@ -211,14 +213,14 @@ public class EditOrderActivity extends Activity {
      * @return ArrayAdapter<Type>
      */
     private ArrayAdapter<Account> getAccountAdapter() {
-        final List<Account> values = new ArrayList<Account>();
+        final ArrayList<Account> values = new ArrayList<Account>();
 
         AccountsDataSource accountsDataSource = new AccountsDataSource(this);
         accountsDataSource.open();
         values.addAll(accountsDataSource.getAllAccounts());
         accountsDataSource.close();
 
-        return new ArrayAdapter<Account>(this, android.R.layout.simple_list_item_1, values);
+        return new AccountsAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -227,14 +229,14 @@ public class EditOrderActivity extends Activity {
      * @return ArrayAdapter<Category>
      */
     private ArrayAdapter<Category> getCategoryAdapter() {
-        final List<Category> values = new ArrayList<Category>();
+        final ArrayList<Category> values = new ArrayList<Category>();
 
         CategoriesDataSource categoriesDataSource = new CategoriesDataSource(this);
         categoriesDataSource.open();
         values.addAll(categoriesDataSource.getAllSorted());
         categoriesDataSource.close();
 
-        return new ArrayAdapter<Category>(this, android.R.layout.simple_list_item_1, values);
+        return new CategoriesAdapter(this, android.R.layout.simple_list_item_1, values);
     }
 
     /**
@@ -279,14 +281,17 @@ public class EditOrderActivity extends Activity {
         final EditOrderActivity context = this;
 
         TextView account = (TextView) findViewById(R.id.account);
+        TextView accountSum = (TextView) findViewById(R.id.account_sum);
+        RelativeLayout accountRow = (RelativeLayout) findViewById(R.id.account_row);
 
         if (selectedAccount.getId() > 0) {
-            account.setText(selectedAccount.toString());
+            account.setText(selectedAccount.getTitle());
+            accountSum.setText("" + selectedAccount.getAmount());
         } else {
             account.setText("-");
         }
 
-        account.setOnClickListener(new TextView.OnClickListener() {
+        accountRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderAccounts = new AlertDialog.Builder(context);
                 builderAccounts.setCancelable(false);
@@ -314,10 +319,11 @@ public class EditOrderActivity extends Activity {
         final EditOrderActivity context = this;
 
         TextView categoryView = (TextView) findViewById(R.id.category);
+        RelativeLayout categoryRow = (RelativeLayout) findViewById(R.id.category_row);
 
-        categoryView.setText(selectedCategory.toString());
+        categoryView.setText(selectedCategory.getTitle());
 
-        categoryView.setOnClickListener(new TextView.OnClickListener() {
+        categoryRow.setOnClickListener(new TextView.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog.Builder builderCategories = new AlertDialog.Builder(context);
                 builderCategories.setCancelable(false);

@@ -4,9 +4,19 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <RelativeLayout
+    <ListView
+            android:id="@android:id/list"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="@string/orders"
+            android:layout_weight="1"
+            />
+    <RelativeLayout
+            android:id="@+id/pagination"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            >
         <Button
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
@@ -29,11 +39,6 @@
                 android:text="@string/filter_last"
                 android:id="@+id/last" android:layout_alignParentRight="true" android:enabled="false"/>
     </RelativeLayout>
-    <ListView
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/orders" />
 </LinearLayout>
 
 

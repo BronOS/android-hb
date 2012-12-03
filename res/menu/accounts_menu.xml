@@ -2,9 +2,12 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add"
+          android:icon="@drawable/add_account"
           android:title="@string/add" />
     <item android:id="@+id/categories"
+          android:icon="@drawable/categories"
           android:title="@string/categories" />
     <item android:id="@+id/orders"
+          android:icon="@drawable/order"
           android:title="@string/orders" />
 </menu>

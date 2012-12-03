@@ -20,29 +20,18 @@
     <TextView
             android:id="@+id/bottomtext"
 
-            android:layout_width="fill_parent"
-            android:layout_height="16dip"
-
-            android:layout_toRightOf="@id/icon"
-            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            />
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentTop="false" android:layout_centerVertical="true"/>
 
     <TextView
             android:id="@+id/toptext"
 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
-            android:layout_toRightOf="@id/icon"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_above="@id/bottomtext"
-            android:layout_alignWithParentIfMissing="true"
-
-            android:gravity="center_vertical"
-            />
+            android:layout_toRightOf="@+id/icon" android:ellipsize="marquee" android:textStyle="bold"
+            android:layout_alignParentLeft="false" android:layout_alignParentTop="false"
+            android:layout_alignParentBottom="false" android:layout_centerVertical="true"/>
 </RelativeLayout>
